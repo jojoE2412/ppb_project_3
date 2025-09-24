@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_marginTop="50dp"
+        android:id="@+id/textViewReceived"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pesan dari Activity 1:"
+        android:textSize="16sp"
+        android:paddingBottom="20dp"/>
+
+    <EditText
+        android:id="@+id/editTextReply"
+        android:minHeight="48dp"
+        android:inputType="textShortMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Balas pesan di sini" />
+
+    <Button
+        android:id="@+id/buttonReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Balas" />
+
+</LinearLayout>
