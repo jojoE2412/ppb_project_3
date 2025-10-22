@@ -1,12 +1,13 @@
 package com.example.project3;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.*;
+import android.graphics.Color;
+import android.view.Gravity;
+import android.widget.LinearLayout.LayoutParams;
 
 import java.util.ArrayList;
 
@@ -15,8 +16,7 @@ public class SecondActivity extends AppCompatActivity {
     public static final String EXTRA_REPLY = "com.example.project3.REPLY";
 
     private EditText editTextReply;
-    private LinearLayout layoutChatContainer;
-    private ScrollView scrollViewChat;
+    private LinearLayout chatLayout2;
     private ArrayList<String> chatHistory;
 
     @Override
@@ -25,32 +25,28 @@ public class SecondActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
 
         editTextReply = findViewById(R.id.editTextReply);
-        layoutChatContainer = findViewById(R.id.layoutChatContainer);
-        scrollViewChat = findViewById(R.id.scrollViewChat);
         Button buttonReply = findViewById(R.id.buttonReply);
+        chatLayout2 = findViewById(R.id.chatLayout2);
 
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         chatHistory = intent.getStringArrayListExtra(MainActivity.EXTRA_HISTORY);
 
-        if (chatHistory == null) {
-            chatHistory = new ArrayList<>();
+        if (chatHistory != null) {
+            for (String chat : chatHistory) {
+                boolean isUser1 = chat.startsWith("1:");
+                addMessage(chat.substring(2), isUser1);
+            }
         }
-
-        // Tambahkan pesan terakhir dari pengguna 1 ke daftar chat
-        if (message != null && !message.isEmpty()) {
-            chatHistory.add("Pengguna 1: " + message);
-        }
-
-        // Tampilkan semua riwayat
-        refreshChat();
 
         buttonReply.setOnClickListener(v -> {
             String reply = editTextReply.getText().toString().trim();
             if (!reply.isEmpty()) {
-                chatHistory.add("Pengguna 2: " + reply);
+                addMessage(reply, false);
+                chatHistory.add("2:" + reply);
 
                 Intent replyIntent = new Intent();
+                replyIntent.putExtra(EXTRA_REPLY, reply);
                 replyIntent.putStringArrayListExtra(MainActivity.EXTRA_HISTORY, chatHistory);
                 setResult(RESULT_OK, replyIntent);
                 finish();
@@ -58,28 +54,34 @@ public class SecondActivity extends AppCompatActivity {
         });
     }
 
-    private void refreshChat() {
-        layoutChatContainer.removeAllViews();
-        for (String msg : chatHistory) {
-            int gravity = msg.startsWith("Pengguna 1") ? Gravity.END : Gravity.START;
-            addMessage(msg, gravity);
-        }
-    }
+    private void addMessage(String message, boolean isUser1) {
+        TextView textView = new TextView(this);
+        textView.setText(message);
+        textView.setTextColor(Color.BLACK);
+        textView.setTextSize(15f);
+        textView.setPadding(20, 10, 20, 10);
 
-    private void addMessage(String text, int gravity) {
-        TextView messageView = new TextView(this);
-        messageView.setText(text);
-        messageView.setPadding(16, 8, 16, 8);
-        messageView.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
+        // Atur lebar maksimal (supaya tidak penuh)
+        int maxWidth = (int) (getResources().getDisplayMetrics().widthPixels * 0.7);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.gravity = gravity;
-        params.setMargins(8, 8, 8, 8);
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(10, 10, 10, 10);
 
-        messageView.setLayoutParams(params);
-        layoutChatContainer.addView(messageView);
-        scrollViewChat.post(() -> scrollViewChat.fullScroll(View.FOCUS_DOWN));
+        if (isUser1) {
+            params.gravity = Gravity.END;
+            textView.setBackgroundResource(R.drawable.bubble_right);
+        } else {
+            params.gravity = Gravity.START;
+            textView.setBackgroundResource(R.drawable.bubble_left);
+        }
+
+        textView.setMaxWidth(maxWidth);
+        textView.setLayoutParams(params);
+
+        chatLayout2.addView(textView);
     }
+
 }
