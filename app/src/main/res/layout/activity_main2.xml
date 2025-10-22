@@ -3,29 +3,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="8dp">
 
-    <TextView
-        android:layout_marginTop="50dp"
-        android:id="@+id/textViewReceived"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pesan dari Activity 1:"
-        android:textSize="16sp"
-        android:paddingBottom="20dp"/>
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/editTextReply"
-        android:minHeight="48dp"
-        android:inputType="textShortMessage"
+        <EditText
+            android:id="@+id/editTextReply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Balas pesan..."
+            android:minHeight="48dp"/>
+
+        <Button
+            android:id="@+id/buttonReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:text="Balas"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollViewChat"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Balas pesan di sini" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <Button
-        android:id="@+id/buttonReply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Balas" />
+        <LinearLayout
+            android:id="@+id/layoutChatContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+    </ScrollView>
+
+
 
 </LinearLayout>
